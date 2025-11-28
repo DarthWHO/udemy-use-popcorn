@@ -8,6 +8,7 @@ import MovieList from "./components/MovieList";
 import WatchedSummary from "./components/WatchedSummary";
 import WatchedList from "./components/WatchedList";
 import { useState } from "react";
+import StarRating from "./components/StarRating";
 
 const tempMovieData = [
   {
@@ -62,7 +63,7 @@ export default function App() {
 
   return (
     <>
-      <Navigation>
+      {/* <Navigation>
         <Logo />
         <Search />
         <NumResults movies={movies} />
@@ -75,7 +76,8 @@ export default function App() {
           <WatchedSummary watched={watched} />
           <WatchedList watched={watched} />
         </ListBox>
-      </Main>
+      </Main> */}
+      <StarRating maxRating={10} />
     </>
   );
 }
