@@ -1,24 +1,29 @@
 import { useState } from "react";
 
-const containerStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "12px",
-};
 
-const starContainerStyle = {
-  display: "flex",
-  gap: "4px",
-};
-
-const startTextStyle = {
-  lineHeight: "1",
-  margin: "0",
-};
-
-export default function StarRating({ starSize = "20px", maxRating = 5 }) {
-  const [rating, setRating] = useState(0);
+export default function StarRating({ defaultRating = 0, starSize = "20px", starColor = "#FCC419", maxRating = 5, className="test", messages=[] }) {
+  const [rating, setRating] = useState(defaultRating);
   const [hoverRating, setHoverRating] = useState(0);
+
+  const containerStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+  };
+
+  const starContainerStyle = {
+    display: "flex",
+    gap: "4px",
+  };
+
+  const startTextStyle = {
+    lineHeight: "1",
+    margin: "0",
+    fontSize: starSize / 1.5,
+    fontWeight: "bold",
+    color: starColor,
+  };
+
 
   const handleStarClick = (index) => {
     setRating(index + 1);
@@ -33,12 +38,13 @@ export default function StarRating({ starSize = "20px", maxRating = 5 }) {
   };
 
   return (
-    <div style={containerStyle}>
+    <div style={containerStyle} className={className}>
       <div style={starContainerStyle}>
         {Array.from({ length: maxRating }, (_, index) => (
           <Star
             key={index}
             starSize={starSize}
+            starColor={starColor}
             isFull={hoverRating ? index < hoverRating : index < rating}
             onClick={() => handleStarClick(index)}
             onMouseOver={() => handMouseOver(index)}
@@ -46,12 +52,12 @@ export default function StarRating({ starSize = "20px", maxRating = 5 }) {
           />
         ))}
       </div>
-      <p style={startTextStyle}>{hoverRating || rating || ""}</p>
+      <p style={startTextStyle}>{messages.length === maxRating ? messages[hoverRating - 1] || messages[rating - 1] || "" : (hoverRating) || (rating) || ""}</p>
     </div>
   );
 }
 
-function Star({ starSize = "20px", isFull, onClick, onMouseOver, onMouseOut }) {
+function Star({ starSize, starColor, isFull, onClick, onMouseOver, onMouseOut }) {
   const starStyle = {
     width: starSize,
     height: starSize,
@@ -65,31 +71,31 @@ function Star({ starSize = "20px", isFull, onClick, onMouseOver, onMouseOut }) {
       onMouseEnter={onMouseOver}
       onMouseLeave={onMouseOut}
     >
-      {isFull ? <FullStar /> : <EmptyStar />}
+      {isFull ? <FullStar starColor={starColor} /> : <EmptyStar starColor={starColor} />}
     </span>
   );
 }
 
-function FullStar() {
+function FullStar({ starColor }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
-      fill="#000"
-      stroke="#000"
+      fill={starColor}
+      stroke={starColor}
     >
       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
     </svg>
   );
 }
 
-function EmptyStar() {
+function EmptyStar({ starColor }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      stroke="#000"
+      stroke={starColor}
     >
       <path
         strokeLinecap="round"
