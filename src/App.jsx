@@ -63,6 +63,14 @@ export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
 
+  useEffect(() => {
+    fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=avengers`)
+      .then((res) => res.json())
+      .then((data) => {
+        setMovies(data.Search);
+      });
+  }, []);
+
   return (
     <>
       <Navigation>
@@ -78,14 +86,13 @@ export default function App() {
           <WatchedSummary watched={watched} />
           <WatchedList watched={watched} />
         </ListBox>
-      </Main>{" "}
-      */}
-      <StarRating
+      </Main>
+      {/* <StarRating
         maxRating={5}
         messages={["Terrible", "Bad", "Okay", "Good", "Excellent"]}
         defaultRating={5}
       />
-      <StarRating maxRating={10} starColor="blue" size="30px" />
+      <StarRating maxRating={10} starColor="blue" size="30px" /> */}
     </>
   );
 }
