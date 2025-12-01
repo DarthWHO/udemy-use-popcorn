@@ -7,8 +7,9 @@ import ListBox from "./components/ListBox";
 import MovieList from "./components/MovieList";
 import WatchedSummary from "./components/WatchedSummary";
 import WatchedList from "./components/WatchedList";
+import Loader from "./components/Loader";
+import ErrorMessage from "./components/ErrorMessage";
 import { useEffect, useState } from "react";
-// import StarRating from "./components/StarRating";
 
 const tempMovieData = [
   {
@@ -60,39 +61,71 @@ const tempWatchedData = [
 const KEY = "cead7c1d";
 
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=avengers`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMovies(data.Search);
-      });
-  }, []);
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        try {
+          setIsLoading(true);
+          setError(null);
+          const res = await fetch(
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+          );
+
+          if (!res.ok) throw new Error("Something went wrong fetching movies");
+
+          const data = await res.json();
+
+          if (data.Response === "False")
+            throw new Error(`⛔ Movie "${query}" not found`);
+
+          setMovies(data.Search);
+          setIsLoading(false);
+        } catch (error) {
+          console.error(error);
+          setError(error.message);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+
+      if (query.length < 3) {
+        setIsLoading(false);
+        setMovies([]);
+        setError(null);
+        return;
+      }
+      fetchMovies();
+    },
+    [query]
+  );
 
   return (
     <>
       <Navigation>
         <Logo />
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </Navigation>
       <Main>
         <ListBox>
-          <MovieList movies={movies} />
+          {movies.length === 0 && (
+            <Loader message="Start typing to search for movies..." />
+          )}
+          {isLoading && !error && <Loader message="Loading..." />}
+          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && error && <ErrorMessage message={error} />}
         </ListBox>
         <ListBox>
           <WatchedSummary watched={watched} />
           <WatchedList watched={watched} />
         </ListBox>
       </Main>
-      {/* <StarRating
-        maxRating={5}
-        messages={["Terrible", "Bad", "Okay", "Good", "Excellent"]}
-        defaultRating={5}
-      />
-      <StarRating maxRating={10} starColor="blue" size="30px" /> */}
     </>
   );
 }
