@@ -1,7 +1,14 @@
 import { useState } from "react";
 
-
-export default function StarRating({ defaultRating = 0, starSize = "20px", starColor = "#FCC419", maxRating = 5, className="test", messages=[] }) {
+export default function StarRating({
+  defaultRating = 0,
+  starSize = "20px",
+  starColor = "#FCC419",
+  maxRating = 5,
+  className = "test",
+  messages = [],
+  onSetRating,
+}) {
   const [rating, setRating] = useState(defaultRating);
   const [hoverRating, setHoverRating] = useState(0);
 
@@ -24,9 +31,9 @@ export default function StarRating({ defaultRating = 0, starSize = "20px", starC
     color: starColor,
   };
 
-
   const handleStarClick = (index) => {
     setRating(index + 1);
+    if (onSetRating) onSetRating(index + 1);
   };
 
   const handMouseOver = (index) => {
@@ -52,12 +59,23 @@ export default function StarRating({ defaultRating = 0, starSize = "20px", starC
           />
         ))}
       </div>
-      <p style={startTextStyle}>{messages.length === maxRating ? messages[hoverRating - 1] || messages[rating - 1] || "" : (hoverRating) || (rating) || ""}</p>
+      <p style={startTextStyle}>
+        {messages.length === maxRating
+          ? messages[hoverRating - 1] || messages[rating - 1] || ""
+          : hoverRating || rating || ""}
+      </p>
     </div>
   );
 }
 
-function Star({ starSize, starColor, isFull, onClick, onMouseOver, onMouseOut }) {
+function Star({
+  starSize,
+  starColor,
+  isFull,
+  onClick,
+  onMouseOver,
+  onMouseOut,
+}) {
   const starStyle = {
     width: starSize,
     height: starSize,
@@ -71,7 +89,11 @@ function Star({ starSize, starColor, isFull, onClick, onMouseOver, onMouseOut })
       onMouseEnter={onMouseOver}
       onMouseLeave={onMouseOut}
     >
-      {isFull ? <FullStar starColor={starColor} /> : <EmptyStar starColor={starColor} />}
+      {isFull ? (
+        <FullStar starColor={starColor} />
+      ) : (
+        <EmptyStar starColor={starColor} />
+      )}
     </span>
   );
 }

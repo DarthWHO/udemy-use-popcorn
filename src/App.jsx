@@ -60,6 +60,7 @@ const tempWatchedData = [
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [userRating, setUserRating] = useState(0);
 
   return (
     <>
@@ -77,8 +78,18 @@ export default function App() {
           <WatchedList watched={watched} />
         </ListBox>
       </Main> */}
-      <StarRating maxRating={5} messages={["Terrible", "Bad", "Okay", "Good", "Excellent"]} defaultRating={5} />
-      <StarRating maxRating={10} starColor="blue" size="30px" />
+      <StarRating
+        maxRating={5}
+        messages={["Terrible", "Bad", "Okay", "Good", "Excellent"]}
+        defaultRating={5}
+      />
+      <StarRating
+        maxRating={10}
+        starColor="blue"
+        starSize="30px"
+        onSetRating={setUserRating}
+      />
+      <p>User rating: {userRating}</p>
     </>
   );
 }
