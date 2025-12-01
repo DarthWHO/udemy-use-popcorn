@@ -7,8 +7,8 @@ import ListBox from "./components/ListBox";
 import MovieList from "./components/MovieList";
 import WatchedSummary from "./components/WatchedSummary";
 import WatchedList from "./components/WatchedList";
-import { useState } from "react";
-import StarRating from "./components/StarRating";
+import { useEffect, useState } from "react";
+// import StarRating from "./components/StarRating";
 
 const tempMovieData = [
   {
@@ -57,14 +57,15 @@ const tempWatchedData = [
   },
 ];
 
+const KEY = "cead7c1d";
+
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
-  const [userRating, setUserRating] = useState(0);
 
   return (
     <>
-      {/* <Navigation>
+      <Navigation>
         <Logo />
         <Search />
         <NumResults movies={movies} />
@@ -77,19 +78,14 @@ export default function App() {
           <WatchedSummary watched={watched} />
           <WatchedList watched={watched} />
         </ListBox>
-      </Main> */}
+      </Main>{" "}
+      */}
       <StarRating
         maxRating={5}
         messages={["Terrible", "Bad", "Okay", "Good", "Excellent"]}
         defaultRating={5}
       />
-      <StarRating
-        maxRating={10}
-        starColor="blue"
-        starSize="30px"
-        onSetRating={setUserRating}
-      />
-      <p>User rating: {userRating}</p>
+      <StarRating maxRating={10} starColor="blue" size="30px" />
     </>
   );
 }
