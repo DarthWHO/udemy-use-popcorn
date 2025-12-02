@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import StarRating from "./StarRating";
 import Loader from "./Loader";
 
@@ -53,6 +53,18 @@ export default function MovieDetails({
       fetchMovie();
     },
     [selectedId]
+  );
+
+  useEffect(
+    function () {
+      if (!movieDetail.Title) return;
+      document.title = `Movie | ${movieDetail.Title}`;
+
+      return function () {
+        document.title = "usePopcorn";
+      };
+    },
+    [movieDetail]
   );
 
   return (
