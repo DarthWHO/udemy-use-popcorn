@@ -1,9 +1,17 @@
-export default function WatchedMovie({ movie, onSelectMovie }) {
+export default function WatchedMovie({
+  movie,
+  onSelectMovie,
+  onDeleteWatched,
+}) {
   return (
-    <li onClick={() => onSelectMovie(movie.imdbID)}>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
-      <div>
+    <li>
+      <img
+        src={movie.Poster}
+        alt={`${movie.Title} poster`}
+        onClick={() => onSelectMovie(movie.imdbID)}
+      />
+      <h3 onClick={() => onSelectMovie(movie.imdbID)}>{movie.Title}</h3>
+      <div onClick={() => onSelectMovie(movie.imdbID)}>
         <p>
           <span>⭐️</span>
           <span>{movie.imdbRating}</span>
@@ -17,6 +25,12 @@ export default function WatchedMovie({ movie, onSelectMovie }) {
           <span>{movie.runtime} min</span>
         </p>
       </div>
+      <button
+        className="btn-delete"
+        onClick={() => onDeleteWatched(movie.imdbID)}
+      >
+        X
+      </button>
     </li>
   );
 }
