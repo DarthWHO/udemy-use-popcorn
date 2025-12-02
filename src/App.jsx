@@ -65,13 +65,17 @@ const KEY = "cead7c1d";
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
-  const [selectedId, setSelectedId] = useState(""); 
+  const [selectedId, setSelectedId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
 
   function selectMovie(id) {
-    setSelectedId(id);
+    id === selectedId ? setSelectedId("") : setSelectedId(id);
+  }
+
+  function closeMovie() {
+    setSelectedId("");
   }
 
   useEffect(
@@ -132,7 +136,7 @@ export default function App() {
         </ListBox>
         <ListBox>
           {selectedId && (
-            <MovieDetails selectedId={selectedId} onSelectMovie={selectMovie} />
+            <MovieDetails selectedId={selectedId} onCloseMovie={closeMovie} />
           )}
           {!selectedId && <WatchedSummary watched={watched} />}
           {!selectedId && <WatchedList watched={watched} />}
