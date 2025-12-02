@@ -10,22 +10,10 @@ export default function WatchedSummary({ watched }) {
     <div className="summary">
       <h2>Movies you watched</h2>
       <div>
-        <p>
-          <span>#️⃣</span>
-          <span>{watched.length} movies</span>
-        </p>
-        <p>
-          <span>⭐️</span>
-          <span>{avgImdbRating}</span>
-        </p>
-        <p>
-          <span>🌟</span>
-          <span>{avgUserRating}</span>
-        </p>
-        <p>
-          <span>⏳</span>
-          <span>{avgRuntime} min</span>
-        </p>
+        <p>#️⃣ {watched.length} movies</p>
+        <p>⭐️ {Math.round(avgImdbRating * 10) / 10}</p>
+        <p>🌟 {Math.round(avgUserRating * 10) / 10}</p>
+        <p>⏳ {Math.round(avgRuntime)} min</p>
       </div>
     </div>
   );
