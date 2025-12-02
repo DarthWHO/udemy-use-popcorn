@@ -9,7 +9,9 @@ import WatchedSummary from "./components/WatchedSummary";
 import WatchedList from "./components/WatchedList";
 import Loader from "./components/Loader";
 import ErrorMessage from "./components/ErrorMessage";
+import MovieDetails from "./components/MovieDetails";
 import { useEffect, useState } from "react";
+import Movie from "./components/Movie";
 
 const tempMovieData = [
   {
@@ -63,9 +65,14 @@ const KEY = "cead7c1d";
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [selectedId, setSelectedId] = useState(""); 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
+
+  function selectMovie(id) {
+    setSelectedId(id);
+  }
 
   useEffect(
     function () {
@@ -118,12 +125,17 @@ export default function App() {
             <Loader message="Start typing to search for movies..." />
           )}
           {isLoading && !error && <Loader message="Loading..." />}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && (
+            <MovieList movies={movies} onSelectMovie={selectMovie} />
+          )}
           {!isLoading && error && <ErrorMessage message={error} />}
         </ListBox>
         <ListBox>
-          <WatchedSummary watched={watched} />
-          <WatchedList watched={watched} />
+          {selectedId && (
+            <MovieDetails selectedId={selectedId} onSelectMovie={selectMovie} />
+          )}
+          {!selectedId && <WatchedSummary watched={watched} />}
+          {!selectedId && <WatchedList watched={watched} />}
         </ListBox>
       </Main>
     </>
